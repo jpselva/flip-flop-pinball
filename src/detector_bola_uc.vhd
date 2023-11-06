@@ -40,10 +40,10 @@ begin
     process (Eatual, iniciar, medida_pronta, fim_timeout, bola_proxima)
     begin
         conta_timeout <= '0';
-        zera_timeout <= '0';
+        zera_timeout  <= '0';
         reset_medidor <= '0';
-        medir <= '0';
-        bola_caiu <= '0';
+        medir         <= '0';
+        bola_caiu     <= '0';
 
         case Eatual is
             when inicial =>
