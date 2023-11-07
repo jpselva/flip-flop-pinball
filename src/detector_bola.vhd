@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 
 entity detector_bola is
 generic (
-    timeout_ciclos : natural := 25000; -- quantos ciclos ate timeout
+    timeout_ciclos : natural := 25000000; -- quantos ciclos ate timeout
     dist_min_cm    : natural := 30  -- distancia minima para detectar bola
 );
 port (
@@ -12,7 +12,8 @@ port (
     iniciar   : in  std_logic;
     echo      : in  std_logic;
     bola_caiu : out std_logic;
-    trigger   : out std_logic
+    trigger   : out std_logic;
+    db_estado : out std_logic_vector(3 downto 0)
 );
 end entity;
 
@@ -29,7 +30,8 @@ architecture arch of detector_bola is
         zera_timeout   : out std_logic;
         reset_medidor  : out std_logic;
         medir          : out std_logic;
-        bola_caiu      : out std_logic
+        bola_caiu      : out std_logic;
+        db_estado      : out std_logic_vector(3 downto 0)
     );
     end component;
 
@@ -88,6 +90,7 @@ begin
         zera_timeout  => s_zera_timeout,
         reset_medidor => s_reset_medidor,
         medir         => s_medir,
-        bola_caiu     => bola_caiu
+        bola_caiu     => bola_caiu,
+        db_estado     => db_estado
     );
 end architecture;

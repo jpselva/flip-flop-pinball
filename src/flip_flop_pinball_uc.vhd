@@ -8,7 +8,8 @@ port (
     iniciar        : in  std_logic;
     bola_caiu      : in  std_logic;
     flipper_enable : out std_logic;
-    iniciar_detec  : out std_logic
+    iniciar_detec  : out std_logic;
+    db_estado      : out std_logic_vector(3 downto 0)
 );
 end entity;
 
@@ -57,4 +58,11 @@ begin
 
         end case;
     end process;
+
+    with Eatual select db_estado <=
+        "0000" when inicial,
+        "0001" when preparacao,
+        "0010" when joga,
+        "1111" when others;
+
 end architecture;

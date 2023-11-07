@@ -13,7 +13,8 @@ port (
     zera_timeout   : out std_logic;
     reset_medidor  : out std_logic;
     medir          : out std_logic;
-    bola_caiu      : out std_logic
+    bola_caiu      : out std_logic;
+    db_estado      : out std_logic_vector(3 downto 0)
 );
 end entity;
 
@@ -89,4 +90,13 @@ begin
                 end if;
         end case;
     end process;
+
+    with Eatual select db_estado <=
+        "0001" when inicial,
+        "0010" when preparacao, 
+        "0011" when inicia_med, 
+        "0100" when espera_med, 
+        "0101" when comparacao, 
+        "0110" when trava,
+        "1111" when others;
 end architecture;

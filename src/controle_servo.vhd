@@ -31,7 +31,7 @@ begin
     PWMGEN: circuito_pwm
     generic map (
         conf_periodo => 1000000,
-        largura_00   => 0,
+        largura_00   => 35000,
         largura_01   => 50000,
         largura_10   => 75000,
         largura_11   => 100000

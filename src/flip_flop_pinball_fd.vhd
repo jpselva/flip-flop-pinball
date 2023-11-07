@@ -17,7 +17,8 @@ port (
     echo           : in  std_logic;
     iniciar_detec  : in  std_logic;
     trigger        : out std_logic;
-    bola_caiu      : out std_logic
+    bola_caiu      : out std_logic;
+    db_detector_bola_estado : out std_logic_vector(3 downto 0)
 );
 end entity flip_flop_pinball_fd;
 
@@ -33,7 +34,7 @@ architecture arch of flip_flop_pinball_fd is
 
     component detector_bola is
     generic (
-        timeout_ciclos : natural := 25000; -- quantos ciclos ate timeout
+        timeout_ciclos : natural := 25000000; -- quantos ciclos ate timeout
         dist_min_cm    : natural := 30  -- distancia minima para detectar bola
     );
     port (
@@ -42,15 +43,16 @@ architecture arch of flip_flop_pinball_fd is
         iniciar   : in  std_logic;
         echo      : in  std_logic;
         bola_caiu : out std_logic;
-        trigger   : out std_logic
+        trigger   : out std_logic;
+        db_estado : out std_logic_vector(3 downto 0)
     );
     end component;
 
     signal s_pwm_flipper1, s_pwm_flipper2 : std_logic;
     signal posicao_servo1_full, posicao_servo2_full : std_logic_vector(1 downto 0);
 begin
-    posicao_servo1_full <= '0' & posicao_servo1;
-    pwm_flipper1 <= s_pwm_flipper1 and flipper_enable;
+    posicao_servo1_full <= '0' & (posicao_servo1 and flipper_enable);
+    pwm_flipper1 <= s_pwm_flipper1;
     SERVO1: controle_servo
     port map (
         clock    => clock,
@@ -59,8 +61,8 @@ begin
         controle => s_pwm_flipper1
     );
 
-    posicao_servo2_full <= '0' & posicao_servo2;
-    pwm_flipper2 <= s_pwm_flipper2 and flipper_enable;
+    posicao_servo2_full <= '0' & (posicao_servo2 and flipper_enable);
+    pwm_flipper2 <= s_pwm_flipper2;
     SERVO2: controle_servo
     port map (
         clock    => clock,
@@ -71,8 +73,8 @@ begin
 
     DETECT: detector_bola
     generic map (
-        timeout_ciclos => 25000, -- quantos ciclos ate timeout
-        dist_min_cm    => 30     -- distancia minima para detectar bola
+        timeout_ciclos => 25000000, -- quantos ciclos ate timeout
+        dist_min_cm    => 15     -- distancia minima para detectar bola
     )
     port map (
         clock     => clock,
@@ -80,6 +82,7 @@ begin
         iniciar   => iniciar_detec,
         echo      => echo,
         bola_caiu => bola_caiu,
-        trigger   => trigger
+        trigger   => trigger,
+        db_estado => db_detector_bola_estado
     );
 end architecture;
