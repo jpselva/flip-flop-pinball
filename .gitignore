@@ -1,0 +1,9 @@
+# ignore everything
+*
+
+# except for...
+!.gitignore
+!src/*
+!flip_flop_pinball.qpf
+!flip_flop_pinball.tcl
+!README.md
