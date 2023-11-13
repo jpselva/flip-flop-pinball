@@ -15,7 +15,7 @@
 
 # Quartus Prime: Generate Tcl File for Project
 # File: flip_flop_pinball.tcl
-# Generated on: Wed Nov  8 20:35:29 2023
+# Generated on: Mon Nov 13 11:34:40 2023
 
 # Load Quartus Prime Tcl Project package
 package require ::quartus::project
@@ -45,7 +45,7 @@ if {$make_assignments} {
 	set_global_assignment -name DEVICE 5CEBA4F23C7
 	set_global_assignment -name ORIGINAL_QUARTUS_VERSION 20.1.0
 	set_global_assignment -name PROJECT_CREATION_TIME_DATE "08:58:45  NOVEMBER 06, 2023"
-	set_global_assignment -name LAST_QUARTUS_VERSION "20.1.0 Lite Edition"
+	set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
 	set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 	set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 	set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
@@ -62,6 +62,8 @@ if {$make_assignments} {
 	set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 	set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 	set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+	set_global_assignment -name VHDL_FILE src/contador_multiplo.vhd
+	set_global_assignment -name VHDL_FILE src/flip_flop_pinball_uc.vhd
 	set_global_assignment -name VHDL_FILE ./src/flip_flop_pinball_uc.vhd
 	set_global_assignment -name VHDL_FILE ./src/medidor_largura.vhd
 	set_global_assignment -name VHDL_FILE ./src/interface_hcsr04_uc.vhd
@@ -105,26 +107,30 @@ if {$make_assignments} {
 	set_location_assignment PIN_U22 -to db_detector_bola_estado[6]
 	set_location_assignment PIN_AA2 -to db_bola_caiu
 	set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
-
-	# Including default assignments
-	set_global_assignment -name REVISION_TYPE BASE -family "Cyclone V"
-	set_global_assignment -name TIMING_ANALYZER_MULTICORNER_ANALYSIS ON -family "Cyclone V"
-	set_global_assignment -name TIMING_ANALYZER_REPORT_WORST_CASE_TIMING_PATHS OFF -family "Cyclone V"
-	set_global_assignment -name TIMING_ANALYZER_CCPP_TRADEOFF_TOLERANCE 0 -family "Cyclone V"
-	set_global_assignment -name TDC_CCPP_TRADEOFF_TOLERANCE 30 -family "Cyclone V"
-	set_global_assignment -name TIMING_ANALYZER_DO_CCPP_REMOVAL ON -family "Cyclone V"
-	set_global_assignment -name DISABLE_LEGACY_TIMING_ANALYZER OFF -family "Cyclone V"
-	set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS ON -family "Cyclone V"
-	set_global_assignment -name SYNCHRONIZATION_REGISTER_CHAIN_LENGTH 3 -family "Cyclone V"
-	set_global_assignment -name SYNTH_RESOURCE_AWARE_INFERENCE_FOR_BLOCK_RAM ON -family "Cyclone V"
-	set_global_assignment -name STRATIXV_CONFIGURATION_SCHEME "PASSIVE SERIAL" -family "Cyclone V"
-	set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS" -family "Cyclone V"
-	set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON -family "Cyclone V"
-	set_global_assignment -name AUTO_DELAY_CHAINS ON -family "Cyclone V"
-	set_global_assignment -name CRC_ERROR_OPEN_DRAIN ON -family "Cyclone V"
-	set_global_assignment -name ACTIVE_SERIAL_CLOCK FREQ_100MHZ -family "Cyclone V"
-	set_global_assignment -name ADVANCED_PHYSICAL_OPTIMIZATION ON -family "Cyclone V"
-	set_global_assignment -name ENABLE_OCT_DONE OFF -family "Cyclone V"
+	set_location_assignment PIN_Y19 -to db_pontuacao1[0]
+	set_location_assignment PIN_AB17 -to db_pontuacao1[1]
+	set_location_assignment PIN_AA10 -to db_pontuacao1[2]
+	set_location_assignment PIN_Y14 -to db_pontuacao1[3]
+	set_location_assignment PIN_V14 -to db_pontuacao1[4]
+	set_location_assignment PIN_AB22 -to db_pontuacao1[5]
+	set_location_assignment PIN_AB21 -to db_pontuacao1[6]
+	set_location_assignment PIN_Y16 -to db_pontuacao2[0]
+	set_location_assignment PIN_W16 -to db_pontuacao2[1]
+	set_location_assignment PIN_Y17 -to db_pontuacao2[2]
+	set_location_assignment PIN_V16 -to db_pontuacao2[3]
+	set_location_assignment PIN_U17 -to db_pontuacao2[4]
+	set_location_assignment PIN_V18 -to db_pontuacao2[5]
+	set_location_assignment PIN_V19 -to db_pontuacao2[6]
+	set_location_assignment PIN_U20 -to db_pontuacao3[0]
+	set_location_assignment PIN_Y20 -to db_pontuacao3[1]
+	set_location_assignment PIN_V20 -to db_pontuacao3[2]
+	set_location_assignment PIN_U16 -to db_pontuacao3[3]
+	set_location_assignment PIN_U15 -to db_pontuacao3[4]
+	set_location_assignment PIN_Y15 -to db_pontuacao3[5]
+	set_location_assignment PIN_P9 -to db_pontuacao3[6]
+	set_location_assignment PIN_AB12 -to ponto1
+	set_location_assignment PIN_AB13 -to ponto2
+	set_location_assignment PIN_AA13 -to ponto3
 
 	# Commit assignments
 	export_assignments
