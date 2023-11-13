@@ -3,13 +3,14 @@ use ieee.std_logic_1164.all;
 
 entity flip_flop_pinball_uc is
 port (
-    clock          : in  std_logic;
-    reset          : in  std_logic;
-    iniciar        : in  std_logic;
-    bola_caiu      : in  std_logic;
-    flipper_enable : out std_logic;
-    iniciar_detec  : out std_logic;
-    db_estado      : out std_logic_vector(3 downto 0)
+    clock           : in  std_logic;
+    reset           : in  std_logic;
+    iniciar         : in  std_logic;
+    bola_caiu       : in  std_logic;
+    game_enable     : out std_logic;
+    iniciar_detec   : out std_logic;
+    reset_pontuacao : out std_logic;
+    db_estado       : out std_logic_vector(3 downto 0)
 );
 end entity;
 
@@ -33,9 +34,9 @@ begin
 
     process (Eatual, iniciar,  bola_caiu)
     begin
-        flipper_enable <= '0';
-        iniciar_detec  <= '0';
-
+        game_enable  <= '0';
+        iniciar_detec   <= '0';
+        reset_pontuacao <= '0';
         case Eatual is
             when inicial =>
                 if iniciar = '1' then
@@ -46,10 +47,11 @@ begin
 
             when preparacao =>
                 iniciar_detec <= '1';
+		reset_pontuacao <= '1';
                 Eprox <= joga;
 
             when joga =>
-                flipper_enable <= '1';
+                game_enable <= '1';
                 if bola_caiu = '1' then
                     Eprox <= inicial;
                 else
