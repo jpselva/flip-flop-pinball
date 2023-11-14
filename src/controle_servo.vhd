@@ -30,11 +30,11 @@ architecture structural of controle_servo is
 begin
     PWMGEN: circuito_pwm
     generic map (
-        conf_periodo => 1000000, -- t = 20 ms
-        largura_00   =>   75000, -- largura poode variar de 50000 ate 100000
-        largura_01   =>   87500,
-        largura_10   =>   93750,
-        largura_11   =>  100000
+        conf_periodo => 1000000,
+        largura_00   => 35000,
+        largura_01   => 50000,
+        largura_10   => 75000,
+        largura_11   => 100000
     )
     port map (
         clock   => clock,
