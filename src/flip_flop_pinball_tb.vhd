@@ -76,21 +76,28 @@ begin
   -- cria pulso de x us
   create_pulse: process
   begin
-    assert false report "Posicao caida" & ": " & integer'image(pulso) & "us" severity note;
-    larguraPulso <= pulso * 1 us;
+    -- simula bounce
+    wait for 20 us;
+    iniciar <= '0';
+    wait for 20 us;
+    iniciar <= '1';
 
-    -- 2) espera pelo pulso trigger
-    wait until falling_edge(trigger);
-    -- 3) espera por 400us (simula tempo entre trigger e echo)
-    wait for 400 us;
-     
-    -- 4) gera pulso de echo (largura = larguraPulso)
-    echo <= '1';
-    wait for larguraPulso;
-    echo <= '0';
+    wait until rising_edge(clock);
 
-      -- 5) espera sinal fim (indica final da medida de uma posicao do sonar)
-    wait until rising_edge(trigger);
+--     -- gerador de echo
+--     assert false report "Posicao caida" & ": " & integer'image(pulso) & "us" severity note;
+--     larguraPulso <= pulso * 1 us;
+--     -- 2) espera pelo pulso trigger
+--     wait until falling_edge(trigger);
+--     -- 3) espera por 400us (simula tempo entre trigger e echo)
+--     wait for 400 us; 
+--     -- 4) gera pulso de echo (largura = larguraPulso)
+--     echo <= '1';
+--     wait for larguraPulso;
+--     echo <= '0';
+--     -- 5) espera sinal fim (indica final da medida de uma posicao do sonar)
+--     wait until rising_edge(trigger);
+
   end process;
   -- geracao dos sinais de entrada (estimulos)
   stimulus: process is
@@ -99,32 +106,33 @@ begin
     keep_simulating <= '1';
     
     ---- valores iniciais ----------------
-    iniciar <= '0';
+    -- iniciar <= '1';
     botao1  <= '1';
     botao2  <= '1';
     pulso   <= pulso_10cm;
     ---- aciona reset ----------------
     wait for 2*clockPeriod;
     reset <= '1'; 
-    wait for 2 us;
+    wait for 20 us;
     reset <= '0';
     wait until falling_edge(clock);
 
     ---- inicia jogo ----------------
-    wait for 20 us;
-    iniciar <= '1';
 
-    ---- espera de 20us
-    wait for 20 us; 
-
-    pulso <= pulso_10cm;
-
+    wait for 100 ms;
+    
     wait for 200 us;
+--    ---- teste pwm
+--
+--    pulso <= pulso_10cm;
+--
+--    wait for 200 us;
+--
+--    botao2 <= '0';
+--    wait for 400 us;
+--	
+--    wait for 20 ms;
 
-    botao2 <= '0';
-    wait for 400 us;
-	
-    wait for 20 ms;
     ---- final dos casos de teste da simulacao
     assert false report "Fim das simulacoes" severity note;
     keep_simulating <= '0';    
