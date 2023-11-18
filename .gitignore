@@ -3,7 +3,7 @@
 
 # except for...
 !.gitignore
-!src/*
+!src/*.vhd
 !cad/*
 !cad
 !src

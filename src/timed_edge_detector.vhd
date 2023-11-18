@@ -1,10 +1,11 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.math_real.all;
 
 entity timed_edge_detector is
     generic (
-        constant M : integer:= 5000000;
-        constant N : integer := 23 
+        M : integer:= 5000000
     );
     port (
         clock  : in  std_logic;
@@ -17,8 +18,8 @@ end entity timed_edge_detector;
 architecture rtl of timed_edge_detector is
     component contador_m is
         generic (
-            constant M : integer := 50;  
-            constant N : integer := 6 
+            constant M : integer;
+            constant N : integer
         );
         port (
             clock : in  std_logic;
@@ -51,12 +52,13 @@ architecture rtl of timed_edge_detector is
         );
     end component edge_detector;
 
+    constant n_bits : natural := natural(ceil(log2(real(M))));
     signal s_fim_timer, s_conta_timer, s_reset_timer, s_pulso, s_pulso_enable : std_logic;
 begin
     TIMER: contador_m
     generic map (
         M  => M,
-        N  => N
+        N  => n_bits
     )
     port map (
         clock  => clock,
@@ -83,9 +85,8 @@ begin
         fim_timer    => s_fim_timer,
         pulso_enable => s_pulso_enable,
         conta_timer  => s_conta_timer,
-	reset_timer  => s_reset_timer
+        reset_timer  => s_reset_timer
     );
 
     pulso <= s_pulso and s_pulso_enable;
-
 end architecture rtl;
