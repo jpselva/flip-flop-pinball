@@ -31,16 +31,16 @@ architecture arch of flip_flop_pinball_uc is
         envia_reset,
         inicial,
         preparacao,
-	envia_inicio_rodada,
+        envia_inicio_rodada,
         inicia_deteccao,
         espera,
         carrega,
         incrementa,
-	envia_pontuacao,
+        envia_pontuacao,
         compara_rodada,
         incrementa_rodada,
-	envia_fim_rodada,
-	envia_fim_jogo,
+        envia_fim_rodada,
+        envia_fim_jogo,
         espera_reinicio
     );
 
@@ -66,8 +66,8 @@ begin
         zera_cont_rodada   <= '0';
         conta_cont_rodada  <= '0';
         zera_cont_alvo     <= '0';
-	envia_dados        <= '0';
-	sel_dado           <= "111";
+        envia_dados        <= '0';
+        sel_dado           <= "111";
 
         case Eatual is
             when envia_reset =>
@@ -142,7 +142,7 @@ begin
 
             when espera_reinicio =>
                 if iniciar = '1' then
-                    Eprox <= inicia_deteccao;
+                    Eprox <= envia_inicio_rodada;
                 else
                     Eprox <= espera_reinicio;
                 end if;
@@ -161,11 +161,11 @@ begin
         "1100" when carrega,
         "0001" when incrementa,
         "0010" when preparacao,
-	"0011" when envia_reset,	
-	"0111" when envia_inicio_rodada,
-	"1010" when envia_pontuacao,
-	"1011" when envia_fim_rodada,
-	"0110" when envia_fim_jogo,
+        "0011" when envia_reset,	
+        "0111" when envia_inicio_rodada,
+        "1010" when envia_pontuacao,
+        "1011" when envia_fim_rodada,
+        "0110" when envia_fim_jogo,
         "0100" when compara_rodada,
         "1000" when incrementa_rodada,
         "1101" when espera_reinicio,

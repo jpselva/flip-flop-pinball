@@ -27,6 +27,19 @@ architecture tb of flip_flop_pinball_tb is
               db_saida_serial         : out std_logic);
     end component;
 
+    component rx_serial_7O1 is
+        port (
+            clock             : in  std_logic;
+            reset             : in  std_logic;
+            dado_serial       : in  std_logic;
+            dado_recebido0    : out std_logic_vector(6 downto 0);
+            dado_recebido1    : out std_logic_vector(6 downto 0);
+            paridade_recebida : out std_logic;
+            pronto_rx         : out std_logic;
+            db_estado         : out std_logic_vector(6 downto 0)
+      );
+    end component;
+
     signal clock                   : std_logic;
     signal reset                   : std_logic;
     signal iniciar                 : std_logic;
@@ -51,9 +64,10 @@ architecture tb of flip_flop_pinball_tb is
     signal   TbSimEnded : std_logic := '0';
     signal   caso_teste : integer    := 0;
 
+    signal rx_reset : std_logic := '0';
 begin
 
-    dut : flip_flop_pinball
+    dut: flip_flop_pinball
     port map (clock                   => clock,
               reset                   => reset,
               iniciar                 => iniciar,
@@ -73,6 +87,19 @@ begin
               saida_serial            => saida_serial,
               db_saida_serial         => db_saida_serial);
 
+    -- Only here to help seeing the serial output
+    rx: rx_serial_7O1
+    port map (
+        clock => clock,
+        reset => rx_reset,
+        dado_serial => saida_serial,
+        dado_recebido0 => open,
+        dado_recebido1 => open,
+        paridade_recebida => open,
+        pronto_rx => open,
+        db_estado => open
+    );
+
     -- Clock generation
     TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';
 
@@ -88,6 +115,11 @@ begin
         botao2 <= '0';
         echo <= '0';
         alvos <= (others => '0');
+
+        rx_reset <= '1'; 
+        wait for 100 ns;
+        rx_reset <= '0';
+        wait for 100 ns;
 
         -- Reset generation
         caso_teste <= 1;
@@ -105,7 +137,7 @@ begin
         iniciar <= '1';
         wait for 500 us;
 
-	-- hit points
+        -- hit points
         caso_teste <= 3;
         alvos(0) <= '1';
         wait for 2*TbPeriod;
@@ -119,7 +151,7 @@ begin
         echo <= '0';
         wait for 500 us;
 
-	-- restart round
+        -- restart round
         caso_teste <= 5;
         iniciar <= '0';
         wait for 10 * TbPeriod;
@@ -140,7 +172,7 @@ begin
         echo <= '0';
         wait for 500 us;
 
-	-- restart round
+        -- restart round
         caso_teste <= 8;
         iniciar <= '0';
         wait for 10 * TbPeriod;
@@ -154,7 +186,7 @@ begin
         echo <= '0';
         wait for 500 us;
 
-	-- restart round
+        -- restart round
         caso_teste <= 10;
         iniciar <= '0';
         wait for 10 * TbPeriod;
