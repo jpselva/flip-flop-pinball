@@ -140,7 +140,6 @@ architecture arch of flip_flop_pinball is
     signal s_envia_dados        : std_logic;
     signal s_saida_serial       : std_logic;
     signal s_sel_dado           : std_logic_vector(2 downto 0);
-
 begin
     s_not_botao1  <= not botao1;
     s_not_botao2  <= not botao2;
@@ -148,7 +147,7 @@ begin
     s_not_reset   <= not reset;
 
     -- FILL UNUSED TARGETS WITH '0':
-    s_alvos <= "0000" & alvos;
+    s_alvos <= not ("0000" & alvos);
 
     EDGE_INIC: edge_detector
     port map (

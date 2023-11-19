@@ -114,7 +114,7 @@ begin
         botao1 <= '0';
         botao2 <= '0';
         echo <= '0';
-        alvos <= (others => '0');
+        alvos <= (others => '1');
 
         rx_reset <= '1'; 
         wait for 100 ns;
@@ -139,9 +139,9 @@ begin
 
         -- hit points
         caso_teste <= 3;
-        alvos(0) <= '1';
-        wait for 2*TbPeriod;
         alvos(0) <= '0';
+        wait for 2*TbPeriod;
+        alvos(0) <= '1';
         wait for 500 us;
 
         -- ball falls
@@ -160,9 +160,9 @@ begin
 
         -- hit more points
         caso_teste <= 6;
-        alvos(1) <= '1';
-        wait for 2*TbPeriod;
         alvos(1) <= '0';
+        wait for 2*TbPeriod;
+        alvos(1) <= '1';
         wait for 500 us;
 
         -- ball falls
