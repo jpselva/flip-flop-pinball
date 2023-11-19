@@ -20,7 +20,8 @@ port (
     registra_cont_alvo : out std_logic;
     db_estado          : out std_logic_vector(3 downto 0);
     zera_cont_rodada   : out std_logic;
-    conta_cont_rodada  : out std_logic
+    conta_cont_rodada  : out std_logic;
+    envia_dados        : out std_logic
 );
 end entity;
 
@@ -32,6 +33,7 @@ architecture arch of flip_flop_pinball_uc is
         espera,
         carrega,
         incrementa,
+	envia_pontuacao,
         compara_rodada,
         incrementa_rodada,
         espera_reinicio
@@ -50,15 +52,16 @@ begin
 
     process (Eatual, iniciar, bola_caiu, ponto_feito, fim_cont_alvo, fim_cont_rodada)
     begin
-        flipper_enable <= '0';
-        iniciar_detec  <= '0';
-        conta_cont_pontos <= '0';
-        zera_cont_pontos <= '0';
-        conta_cont_alvo <= '0';
+        flipper_enable     <= '0';
+        iniciar_detec      <= '0';
+        conta_cont_pontos  <= '0';
+        zera_cont_pontos   <= '0';
+        conta_cont_alvo    <= '0';
         registra_cont_alvo <= '0';
-        zera_cont_rodada <= '0';
-        conta_cont_rodada <= '0';
-        zera_cont_alvo <= '0';
+        zera_cont_rodada   <= '0';
+        conta_cont_rodada  <= '0';
+        zera_cont_alvo     <= '0';
+	envia_dados        <= '0';
 
         case Eatual is
             when inicial =>
@@ -95,10 +98,14 @@ begin
                 conta_cont_alvo <= '1';
                 conta_cont_pontos <= '1';
                 if fim_cont_alvo = '1' then
-                    Eprox <= espera;
+                    Eprox <= envia_pontuacao;
                 else
                     Eprox <= incrementa;
                 end if;
+
+            when envia_pontuacao =>
+                envia_dados <= '1';
+                Eprox <= espera;
 
             when compara_rodada =>
                 if fim_cont_rodada = '1' then 
@@ -127,6 +134,7 @@ begin
         "1100" when carrega,
         "0001" when incrementa,
         "0010" when preparacao,
+	"0011" when envia_pontuacao,
         "0100" when compara_rodada,
         "1000" when incrementa_rodada,
         "1101" when espera_reinicio,

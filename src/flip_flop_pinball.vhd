@@ -26,7 +26,11 @@ port (
 
     -- pontuacao
     alvos                     : in  std_logic_vector(3 downto 0);
-    pontos0, pontos1, pontos2 : out std_logic_vector(6 downto 0)
+    pontos0, pontos1, pontos2 : out std_logic_vector(6 downto 0);
+    
+    -- envio serial
+    saida_serial            : out std_logic;
+    db_saida_serial         : out std_logic
 );
 end entity flip_flop_pinball;
 
@@ -64,7 +68,11 @@ architecture arch of flip_flop_pinball is
         -- rodada
         zera_cont_rodada  : in  std_logic;
         conta_cont_rodada : in  std_logic;
-        fim_cont_rodada   : out std_logic
+        fim_cont_rodada   : out std_logic;
+
+        -- envio serial
+        envia_dados       : in  std_logic;
+        saida_serial      : out std_logic
     );
     end component flip_flop_pinball_fd;
 
@@ -87,7 +95,8 @@ architecture arch of flip_flop_pinball is
         registra_cont_alvo : out std_logic;
         db_estado          : out std_logic_vector(3 downto 0);
         zera_cont_rodada   : out std_logic;
-        conta_cont_rodada  : out std_logic
+        conta_cont_rodada  : out std_logic;
+        envia_dados        : out std_logic
     );
     end component;
 
@@ -126,6 +135,9 @@ architecture arch of flip_flop_pinball is
     signal s_conta_cont_rodada  : std_logic;
     signal s_alvos              : std_logic_vector(7 downto 0);
     signal s_pontos0_bcd, s_pontos1_bcd, s_pontos2_bcd : std_logic_vector(3 downto 0);
+    signal s_envia_dados        : std_logic;
+    signal s_saida_serial       : std_logic;
+
 begin
     s_not_botao1  <= not botao1;
     s_not_botao2  <= not botao2;
@@ -170,6 +182,8 @@ begin
         zera_cont_rodada   => s_zera_cont_rodada,
         conta_cont_rodada  => s_conta_cont_rodada,
         fim_cont_rodada    => s_fim_cont_rodada,
+	envia_dados        => s_envia_dados,
+	saida_serial       => s_saida_serial,
         db_detector_bola_estado => s_db_detector_bola_estado
     );
 
@@ -191,7 +205,8 @@ begin
         registra_cont_alvo => s_registra_cont_alvo,
         db_estado          => s_db_estado,
         zera_cont_rodada   => s_zera_cont_rodada,
-        conta_cont_rodada  => s_conta_cont_rodada
+        conta_cont_rodada  => s_conta_cont_rodada,
+	envia_dados        => s_envia_dados
     );
 
     HEX_ESTADO: hexa7seg
@@ -224,5 +239,10 @@ begin
         sseg => pontos2
     );
 
+ 
+
     db_bola_caiu <= s_bola_caiu;
+    saida_serial    <= s_saida_serial;
+    db_saida_serial <= s_saida_serial;
+
 end architecture;

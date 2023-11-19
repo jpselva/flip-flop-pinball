@@ -35,7 +35,11 @@ port (
     -- rodada
     zera_cont_rodada  : in  std_logic;
     conta_cont_rodada : in  std_logic;
-    fim_cont_rodada  : out std_logic
+    fim_cont_rodada   : out std_logic;
+    
+    -- envio serial
+    envia_dados       : in  std_logic;
+    saida_serial      : out std_logic
 );
 end entity flip_flop_pinball_fd;
 
@@ -122,9 +126,20 @@ architecture arch of flip_flop_pinball_fd is
         );
     end component;
 
+    component envia_pontuacao is
+    port (
+        clock           : in  std_logic;
+        reset           : in  std_logic;
+        envia_dados     : in  std_logic;
+        pontuacao       : in  std_logic_vector(11 downto 0);
+        saida_serial    : out std_logic;
+        fim_envio       : out std_logic;
+        db_estado       : out std_logic_vector(3 downto 0)
+    );
+    end component;
+
     signal s_pwm_flipper1, s_pwm_flipper2 : std_logic;
     signal posicao_servo1_full, posicao_servo2_full : std_logic_vector(1 downto 0);
-
     -- numero de bits necessarios para identificar 1 alvo
     constant n_bits_alvo       : integer := 3;
     -- numero de bits necessarios para quantificar valor de um alvo
@@ -132,6 +147,9 @@ architecture arch of flip_flop_pinball_fd is
 
     signal s_alvo_acertado : std_logic_vector(n_bits_alvo - 1 downto 0);
     signal s_valor_alvo    : std_logic_vector(n_bits_valor_alvo-1 downto 0);
+    signal s_pontos0, s_pontos1, s_pontos2    : std_logic_vector(3 downto 0);
+    signal s_pontuacao    : std_logic_vector(11 downto 0);
+
 begin
     posicao_servo1_full <= '0' & (posicao_servo1 and flipper_enable);
     pwm_flipper1 <= s_pwm_flipper1;
@@ -201,10 +219,14 @@ begin
         clock    => clock,
         zera     => zera_cont_pontos,
         conta    => conta_cont_pontos,
-        digito0  => pontos0,
-        digito1  => pontos1,
-        digito2  => pontos2
+        digito0  => s_pontos0,
+        digito1  => s_pontos1,
+        digito2  => s_pontos2
     );
+
+    pontos0 <= s_pontos0;
+    pontos1 <= s_pontos1;
+    pontos2 <= s_pontos2;
 
     -- SET SCORES BELOW
     -- ALWAYS SUBTRACT 1 FROM SCORE WHEN WRITING IT HERE
@@ -233,4 +255,17 @@ begin
         fim   => fim_cont_rodada,
         meio  => open
     );
+
+    s_pontuacao <= s_pontos2&s_pontos1&s_pontos0;
+    SERIAL: envia_pontuacao
+    port map (
+        clock           => clock,
+        reset           => reset,
+        envia_dados     => envia_dados,
+        pontuacao       => s_pontuacao,
+        saida_serial    => saida_serial,
+        fim_envio       => open,
+        db_estado       => open
+    );
+
 end architecture;

@@ -22,7 +22,9 @@ architecture tb of flip_flop_pinball_tb is
               alvos                   : in std_logic_vector (3 downto 0);
               pontos0                 : out std_logic_vector (6 downto 0);
               pontos1                 : out std_logic_vector (6 downto 0);
-              pontos2                 : out std_logic_vector (6 downto 0));
+              pontos2                 : out std_logic_vector (6 downto 0);
+              saida_serial            : out std_logic;
+              db_saida_serial         : out std_logic);
     end component;
 
     signal clock                   : std_logic;
@@ -41,6 +43,8 @@ architecture tb of flip_flop_pinball_tb is
     signal pontos0                 : std_logic_vector (6 downto 0);
     signal pontos1                 : std_logic_vector (6 downto 0);
     signal pontos2                 : std_logic_vector (6 downto 0);
+    signal saida_serial            : std_logic;
+    signal db_saida_serial         : std_logic;
 
     constant TbPeriod : time      := 20 ns; -- EDIT Put right period here
     signal TbClock : std_logic    := '0';
@@ -64,7 +68,9 @@ begin
               alvos                   => alvos,
               pontos0                 => pontos0,
               pontos1                 => pontos1,
-              pontos2                 => pontos2);
+              pontos2                 => pontos2,
+              saida_serial            => saida_serial,
+              db_saida_serial         => db_saida_serial);
 
     -- Clock generation
     TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';
@@ -103,6 +109,7 @@ begin
         wait for 2*TbPeriod;
         alvos(1) <= '0';
 
+	wait for 100 us;
         -- Stop the clock and hence terminate the simulation
         wait for 200*TbPeriod;
         TbSimEnded <= '1';
