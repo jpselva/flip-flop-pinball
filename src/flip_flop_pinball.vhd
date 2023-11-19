@@ -72,6 +72,7 @@ architecture arch of flip_flop_pinball is
 
         -- envio serial
         envia_dados       : in  std_logic;
+        sel_dado          : in  std_logic_vector(2 downto 0);
         saida_serial      : out std_logic
     );
     end component flip_flop_pinball_fd;
@@ -96,7 +97,8 @@ architecture arch of flip_flop_pinball is
         db_estado          : out std_logic_vector(3 downto 0);
         zera_cont_rodada   : out std_logic;
         conta_cont_rodada  : out std_logic;
-        envia_dados        : out std_logic
+        envia_dados        : out std_logic;
+        sel_dado           : out std_logic_vector(2 downto 0) 
     );
     end component;
 
@@ -137,6 +139,7 @@ architecture arch of flip_flop_pinball is
     signal s_pontos0_bcd, s_pontos1_bcd, s_pontos2_bcd : std_logic_vector(3 downto 0);
     signal s_envia_dados        : std_logic;
     signal s_saida_serial       : std_logic;
+    signal s_sel_dado           : std_logic_vector(2 downto 0);
 
 begin
     s_not_botao1  <= not botao1;
@@ -183,6 +186,7 @@ begin
         conta_cont_rodada  => s_conta_cont_rodada,
         fim_cont_rodada    => s_fim_cont_rodada,
 	envia_dados        => s_envia_dados,
+        sel_dado           => s_sel_dado,
 	saida_serial       => s_saida_serial,
         db_detector_bola_estado => s_db_detector_bola_estado
     );
@@ -206,7 +210,8 @@ begin
         db_estado          => s_db_estado,
         zera_cont_rodada   => s_zera_cont_rodada,
         conta_cont_rodada  => s_conta_cont_rodada,
-	envia_dados        => s_envia_dados
+	envia_dados        => s_envia_dados,
+        sel_dado           => s_sel_dado
     );
 
     HEX_ESTADO: hexa7seg
@@ -238,8 +243,6 @@ begin
         hexa => s_pontos2_bcd,
         sseg => pontos2
     );
-
- 
 
     db_bola_caiu <= s_bola_caiu;
     saida_serial    <= s_saida_serial;

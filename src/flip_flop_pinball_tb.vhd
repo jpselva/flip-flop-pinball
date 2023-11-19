@@ -47,8 +47,9 @@ architecture tb of flip_flop_pinball_tb is
     signal db_saida_serial         : std_logic;
 
     constant TbPeriod : time      := 20 ns; -- EDIT Put right period here
-    signal TbClock : std_logic    := '0';
-    signal TbSimEnded : std_logic := '0';
+    signal   TbClock : std_logic    := '0';
+    signal   TbSimEnded : std_logic := '0';
+    signal   caso_teste : integer    := 0;
 
 begin
 
@@ -80,7 +81,8 @@ begin
 
     stimuli : process
     begin
-        -- EDIT Adapt initialization as needed
+        -- EDIT Adapt initialization as needed 
+        caso_teste <= 0;
         iniciar <= '1';
         botao1 <= '0';
         botao2 <= '0';
@@ -88,30 +90,80 @@ begin
         alvos <= (others => '0');
 
         -- Reset generation
+        caso_teste <= 1;
         reset <= '1';
         wait for 100 ns;
         reset <= '0';
         wait for 100 ns;
         reset <= '1';
+        wait for 500 us;
 
         -- start game
+        caso_teste <= 2;
         iniciar <= '0';
         wait for 10 * TbPeriod;
         iniciar <= '1';
-        wait for 10 * TbPeriod;
+        wait for 500 us;
 
+	-- hit points
+        caso_teste <= 3;
         alvos(0) <= '1';
         wait for 2*TbPeriod;
         alvos(0) <= '0';
+        wait for 500 us;
 
-        wait for 10*TbPeriod;
+        -- ball falls
+        caso_teste <= 4;
+        echo <= '1';
+        wait for 100 us;
+        echo <= '0';
+        wait for 500 us;
+
+	-- restart round
+        caso_teste <= 5;
+        iniciar <= '0';
+        wait for 10 * TbPeriod;
+        iniciar <= '1';
+        wait for 500 us;
+
+        -- hit more points
+        caso_teste <= 6;
         alvos(1) <= '1';
         wait for 2*TbPeriod;
         alvos(1) <= '0';
+        wait for 500 us;
 
-	wait for 100 us;
+        -- ball falls
+        caso_teste <= 7;
+        echo <= '1';
+        wait for 100 us;
+        echo <= '0';
+        wait for 500 us;
+
+	-- restart round
+        caso_teste <= 8;
+        iniciar <= '0';
+        wait for 10 * TbPeriod;
+        iniciar <= '1';
+        wait for 500 us;
+
+        -- ball falls
+        caso_teste <= 9;
+        echo <= '1';
+        wait for 100 us;
+        echo <= '0';
+        wait for 500 us;
+
+	-- restart round
+        caso_teste <= 10;
+        iniciar <= '0';
+        wait for 10 * TbPeriod;
+        iniciar <= '1';
+        wait for 500 us;
+
+        wait for 100 us;
         -- Stop the clock and hence terminate the simulation
-        wait for 200*TbPeriod;
+        -- wait for 200*TbPeriod;
         TbSimEnded <= '1';
         wait;
     end process;

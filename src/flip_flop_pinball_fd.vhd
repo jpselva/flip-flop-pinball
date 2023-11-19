@@ -39,6 +39,7 @@ port (
     
     -- envio serial
     envia_dados       : in  std_logic;
+    sel_dado          : in  std_logic_vector(2 downto 0);
     saida_serial      : out std_logic
 );
 end entity flip_flop_pinball_fd;
@@ -132,6 +133,7 @@ architecture arch of flip_flop_pinball_fd is
         reset           : in  std_logic;
         envia_dados     : in  std_logic;
         pontuacao       : in  std_logic_vector(11 downto 0);
+        sel_dado        : in  std_logic_vector( 2 downto 0);
         saida_serial    : out std_logic;
         fim_envio       : out std_logic;
         db_estado       : out std_logic_vector(3 downto 0)
@@ -263,6 +265,7 @@ begin
         reset           => reset,
         envia_dados     => envia_dados,
         pontuacao       => s_pontuacao,
+        sel_dado        => sel_dado,
         saida_serial    => saida_serial,
         fim_envio       => open,
         db_estado       => open

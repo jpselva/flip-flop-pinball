@@ -21,14 +21,17 @@ port (
     db_estado          : out std_logic_vector(3 downto 0);
     zera_cont_rodada   : out std_logic;
     conta_cont_rodada  : out std_logic;
-    envia_dados        : out std_logic
+    envia_dados        : out std_logic;
+    sel_dado           : out std_logic_vector(2 downto 0) 
 );
 end entity;
 
 architecture arch of flip_flop_pinball_uc is
     type tipo_estado is (
+        envia_reset,
         inicial,
         preparacao,
+	envia_inicio_rodada,
         inicia_deteccao,
         espera,
         carrega,
@@ -36,6 +39,8 @@ architecture arch of flip_flop_pinball_uc is
 	envia_pontuacao,
         compara_rodada,
         incrementa_rodada,
+	envia_fim_rodada,
+	envia_fim_jogo,
         espera_reinicio
     );
 
@@ -44,7 +49,7 @@ begin
     process (reset, clock)
     begin
         if reset = '1' then
-            Eatual <= inicial;
+            Eatual <= envia_reset;
         elsif clock'event and clock = '1' then
             Eatual <= Eprox; 
         end if;
@@ -62,8 +67,14 @@ begin
         conta_cont_rodada  <= '0';
         zera_cont_alvo     <= '0';
 	envia_dados        <= '0';
+	sel_dado           <= "111";
 
         case Eatual is
+            when envia_reset =>
+                envia_dados <= '1';
+                sel_dado    <= "000";
+                Eprox       <= inicial;
+
             when inicial =>
                 if iniciar = '1' then
                     Eprox <= preparacao;
@@ -75,7 +86,12 @@ begin
                 zera_cont_alvo <= '1';
                 zera_cont_pontos <= '1';
                 zera_cont_rodada <= '1';
-                Eprox <= inicia_deteccao;
+                Eprox <= envia_inicio_rodada;
+
+            when envia_inicio_rodada =>
+                envia_dados <= '1';
+                sel_dado    <= "001";
+                Eprox       <= inicia_deteccao;
 
             when inicia_deteccao =>
                 iniciar_detec <= '1';
@@ -105,18 +121,24 @@ begin
 
             when envia_pontuacao =>
                 envia_dados <= '1';
+                sel_dado    <= "100";
                 Eprox <= espera;
 
             when compara_rodada =>
                 if fim_cont_rodada = '1' then 
-                    Eprox <= inicial;
+                    Eprox <= envia_fim_jogo;
                 else
                     Eprox <= incrementa_rodada;
                 end if;
 
             when incrementa_rodada =>
                 conta_cont_rodada <= '1';
-                Eprox <= espera_reinicio;
+                Eprox <= envia_fim_rodada;
+
+            when envia_fim_rodada =>
+                envia_dados <= '1';
+                sel_dado    <= "010";
+                Eprox       <= espera_reinicio;
 
             when espera_reinicio =>
                 if iniciar = '1' then
@@ -124,7 +146,12 @@ begin
                 else
                     Eprox <= espera_reinicio;
                 end if;
-                
+
+           when envia_fim_jogo =>
+                envia_dados <= '1';
+                sel_dado    <= "011";
+                Eprox       <= inicial;
+
         end case;
     end process;
 
@@ -134,7 +161,11 @@ begin
         "1100" when carrega,
         "0001" when incrementa,
         "0010" when preparacao,
-	"0011" when envia_pontuacao,
+	"0011" when envia_reset,	
+	"0111" when envia_inicio_rodada,
+	"1010" when envia_pontuacao,
+	"1011" when envia_fim_rodada,
+	"0110" when envia_fim_jogo,
         "0100" when compara_rodada,
         "1000" when incrementa_rodada,
         "1101" when espera_reinicio,

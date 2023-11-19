@@ -5,13 +5,14 @@ entity envia_pontuacao_uc is
 port (
     clock            : in  std_logic;
     reset            : in  std_logic;
-    enviar_pontuacao : in  std_logic;
+    envia_dados      : in  std_logic;
     fim_conta_byte   : in  std_logic;
     tx_pronto        : in  std_logic;
     zera_conta_byte  : out std_logic;
     tx_partida       : out std_logic;
     conta_byte       : out std_logic;
     fim_envio        : out std_logic;
+    write_sel        : out std_logic;
     db_estado        : out std_logic_vector(3 downto 0)
 );
 end entity;
@@ -36,15 +37,17 @@ begin
         end if;
     end process;
 
-    process (Eatual, enviar_pontuacao, fim_conta_byte, tx_pronto)
+    process (Eatual, envia_dados, fim_conta_byte, tx_pronto)
     begin
         zera_conta_byte <= '0';
         tx_partida      <= '0';
         conta_byte      <= '0';
         fim_envio       <= '0';
+        write_sel       <= '0';
         case Eatual is
             when inicial =>
-                if enviar_pontuacao = '1' then
+                write_sel <= '1';
+                if envia_dados = '1' then
                     Eprox <= preparacao;
                 else
                     Eprox <= inicial;
