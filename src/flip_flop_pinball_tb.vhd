@@ -24,7 +24,9 @@ architecture tb of flip_flop_pinball_tb is
               pontos1                 : out std_logic_vector (6 downto 0);
               pontos2                 : out std_logic_vector (6 downto 0);
               saida_serial            : out std_logic;
-              db_saida_serial         : out std_logic);
+              db_saida_serial         : out std_logic;
+              sinal_led               : out std_logic;
+	      sinal_buzzer            : out std_logic);
     end component;
 
     component rx_serial_7O1 is
@@ -58,6 +60,8 @@ architecture tb of flip_flop_pinball_tb is
     signal pontos2                 : std_logic_vector (6 downto 0);
     signal saida_serial            : std_logic;
     signal db_saida_serial         : std_logic;
+    signal sinal_led               : std_logic;
+    signal sinal_buzzer            : std_logic;
 
     constant TbPeriod : time      := 20 ns; -- EDIT Put right period here
     signal   TbClock : std_logic    := '0';
@@ -85,7 +89,9 @@ begin
               pontos1                 => pontos1,
               pontos2                 => pontos2,
               saida_serial            => saida_serial,
-              db_saida_serial         => db_saida_serial);
+              db_saida_serial         => db_saida_serial,
+              sinal_led               => sinal_led,
+              sinal_buzzer            => sinal_buzzer);
 
     -- Only here to help seeing the serial output
     rx: rx_serial_7O1

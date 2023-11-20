@@ -22,7 +22,8 @@ port (
     zera_cont_rodada   : out std_logic;
     conta_cont_rodada  : out std_logic;
     envia_dados        : out std_logic;
-    sel_dado           : out std_logic_vector(2 downto 0) 
+    sel_dado           : out std_logic_vector(2 downto 0); 
+    ativa_lb           : out std_logic
 );
 end entity;
 
@@ -67,6 +68,7 @@ begin
         conta_cont_rodada  <= '0';
         zera_cont_alvo     <= '0';
         envia_dados        <= '0';
+        ativa_lb           <= '0';
         sel_dado           <= "111";
 
         case Eatual is
@@ -90,6 +92,7 @@ begin
 
             when envia_inicio_rodada =>
                 envia_dados <= '1';
+                ativa_lb    <= '1';
                 sel_dado    <= "001";
                 Eprox       <= inicia_deteccao;
 
@@ -121,6 +124,7 @@ begin
 
             when envia_pontuacao =>
                 envia_dados <= '1';
+                ativa_lb    <= '1';
                 sel_dado    <= "100";
                 Eprox <= espera;
 
@@ -137,6 +141,7 @@ begin
 
             when envia_fim_rodada =>
                 envia_dados <= '1';
+                ativa_lb    <= '1';
                 sel_dado    <= "010";
                 Eprox       <= espera_reinicio;
 
@@ -149,6 +154,7 @@ begin
 
            when envia_fim_jogo =>
                 envia_dados <= '1';
+                ativa_lb    <= '1';
                 sel_dado    <= "011";
                 Eprox       <= inicial;
 

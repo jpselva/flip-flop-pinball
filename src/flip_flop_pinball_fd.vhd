@@ -40,7 +40,12 @@ port (
     -- envio serial
     envia_dados       : in  std_logic;
     sel_dado          : in  std_logic_vector(2 downto 0);
-    saida_serial      : out std_logic
+    saida_serial      : out std_logic;
+
+    -- interface led/buzzer
+    ativa_lb     : in  std_logic;
+    sinal_led    : out std_logic;
+    sinal_buzzer : out std_logic
 );
 end entity flip_flop_pinball_fd;
 
@@ -137,6 +142,18 @@ architecture arch of flip_flop_pinball_fd is
         saida_serial    : out std_logic;
         fim_envio       : out std_logic;
         db_estado       : out std_logic_vector(3 downto 0)
+    );
+    end component;
+    
+    component controle_led_buzzer is
+    port (
+        clock          : in  std_logic;
+        reset          : in  std_logic;
+        sel_nota       : in  std_logic_vector(2 downto 0);
+        ativa_lb       : in  std_logic;
+        sinal_buzzer   : out std_logic;
+        sinal_led      : out std_logic;
+        db_estado      : out std_logic_vector(3 downto 0)
     );
     end component;
 
@@ -269,6 +286,17 @@ begin
         saida_serial    => saida_serial,
         fim_envio       => open,
         db_estado       => open
+    );
+    
+    CTRL_LB: controle_led_buzzer
+    port map(
+        clock          => clock,
+        reset          => reset,
+        sel_nota       => sel_dado,
+        ativa_lb       => ativa_lb,
+        sinal_buzzer   => sinal_buzzer,
+        sinal_led      => sinal_led,
+        db_estado      => open
     );
 
 end architecture;

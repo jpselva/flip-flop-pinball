@@ -64,15 +64,15 @@ begin
             when espera_transmissao =>
                 if tx_pronto = '0' then
                     Eprox <= espera_transmissao;
-	        elsif fim_conta_byte = '0' then
+                elsif fim_conta_byte = '0' then
                     Eprox <= proximo_byte;
                 else 
                     Eprox <= fim;
                 end if;
-	
-	    when proximo_byte =>
-		conta_byte <= '1';
-		Eprox <= transmite_byte;
+        
+            when proximo_byte =>
+                conta_byte <= '1';
+                Eprox <= transmite_byte;
 
             when fim =>
                 fim_envio <= '1';

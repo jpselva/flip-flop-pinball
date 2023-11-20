@@ -30,7 +30,11 @@ port (
     
     -- envio serial
     saida_serial            : out std_logic;
-    db_saida_serial         : out std_logic
+    db_saida_serial         : out std_logic;
+
+    -- interface led/buzzer
+    sinal_led    : out std_logic;
+    sinal_buzzer : out std_logic
 );
 end entity flip_flop_pinball;
 
@@ -73,7 +77,12 @@ architecture arch of flip_flop_pinball is
         -- envio serial
         envia_dados       : in  std_logic;
         sel_dado          : in  std_logic_vector(2 downto 0);
-        saida_serial      : out std_logic
+        saida_serial      : out std_logic;
+    
+        -- interface led/buzzer
+        ativa_lb     : in  std_logic;
+        sinal_led    : out std_logic;
+        sinal_buzzer : out std_logic
     );
     end component flip_flop_pinball_fd;
 
@@ -98,7 +107,8 @@ architecture arch of flip_flop_pinball is
         zera_cont_rodada   : out std_logic;
         conta_cont_rodada  : out std_logic;
         envia_dados        : out std_logic;
-        sel_dado           : out std_logic_vector(2 downto 0) 
+        sel_dado           : out std_logic_vector(2 downto 0); 
+        ativa_lb           : out std_logic
     );
     end component;
 
@@ -138,6 +148,7 @@ architecture arch of flip_flop_pinball is
     signal s_alvos              : std_logic_vector(7 downto 0);
     signal s_pontos0_bcd, s_pontos1_bcd, s_pontos2_bcd : std_logic_vector(3 downto 0);
     signal s_envia_dados        : std_logic;
+    signal s_ativa_lb           : std_logic;
     signal s_saida_serial       : std_logic;
     signal s_sel_dado           : std_logic_vector(2 downto 0);
 begin
@@ -187,6 +198,9 @@ begin
 	envia_dados        => s_envia_dados,
         sel_dado           => s_sel_dado,
 	saida_serial       => s_saida_serial,
+	ativa_lb           => s_ativa_lb,
+	sinal_led          => sinal_led,
+	sinal_buzzer       => sinal_buzzer,
         db_detector_bola_estado => s_db_detector_bola_estado
     );
 
@@ -210,7 +224,8 @@ begin
         zera_cont_rodada   => s_zera_cont_rodada,
         conta_cont_rodada  => s_conta_cont_rodada,
 	envia_dados        => s_envia_dados,
-        sel_dado           => s_sel_dado
+        sel_dado           => s_sel_dado,
+	ativa_lb           => s_ativa_lb
     );
 
     HEX_ESTADO: hexa7seg
@@ -246,5 +261,4 @@ begin
     db_bola_caiu <= s_bola_caiu;
     saida_serial    <= s_saida_serial;
     db_saida_serial <= s_saida_serial;
-
 end architecture;
