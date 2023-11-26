@@ -3,6 +3,10 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity controle_servo is
+    generic (
+        largura_00 : integer;
+        largura_01 : integer
+    );
     port (
         clock    : in std_logic;
         reset    : in std_logic;
@@ -31,8 +35,8 @@ begin
     PWMGEN: circuito_pwm
     generic map (
         conf_periodo => 1000000,
-        largura_00   => 35000,
-        largura_01   => 50000,
+        largura_00   => largura_00,
+        largura_01   => largura_01,
         largura_10   => 75000,
         largura_11   => 100000
     )

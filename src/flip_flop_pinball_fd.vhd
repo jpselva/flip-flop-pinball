@@ -50,7 +50,11 @@ port (
 end entity flip_flop_pinball_fd;
 
 architecture arch of flip_flop_pinball_fd is
-    component controle_servo is
+    component controle_servo is    
+    generic (
+        largura_00 : integer;
+        largura_01 : integer
+    );
     port (
         clock    : in  std_logic;
         reset    : in  std_logic;
@@ -173,6 +177,10 @@ begin
     posicao_servo1_full <= '0' & (posicao_servo1 and flipper_enable);
     pwm_flipper1 <= s_pwm_flipper1;
     SERVO1: controle_servo
+    generic map (
+        largura_00 => 35000,
+        largura_01 => 60000
+    )
     port map (
         clock    => clock,
         reset    => reset,
@@ -183,6 +191,10 @@ begin
     posicao_servo2_full <= '0' & (posicao_servo2 and flipper_enable);
     pwm_flipper2 <= s_pwm_flipper2;
     SERVO2: controle_servo
+     generic map (
+        largura_00 => 60000,
+        largura_01 => 35000
+    )
     port map (
         clock    => clock,
         reset    => reset,

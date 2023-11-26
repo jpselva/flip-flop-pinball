@@ -101,6 +101,7 @@ begin
                 Eprox <= espera;
 
             when espera =>
+                flipper_enable <= '1';
                 if ponto_feito = '1' then
                     Eprox <= carrega;
                 elsif bola_caiu = '1' then
