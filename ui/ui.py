@@ -1,5 +1,6 @@
 import pygame
 import paho.mqtt.client as mqtt
+from enum import Enum
 
 
 MQTT_INFO = {
@@ -12,7 +13,7 @@ MQTT_INFO = {
 }
 
 
-class CustomEvents:
+class CustomEvents(Enum):
     STARTED = pygame.event.custom_type()
     SCORED = pygame.event.custom_type()
     MATCH_ENDED = pygame.event.custom_type()
@@ -52,19 +53,21 @@ class GameEventGenerator:
     def post_event(self, subtopic, content):
         match [content[0], content[1:]]:
             case ["I", _]:
-                print("game started")
+                pygame.event.post(pygame.event.Event(CustomEvents.STARTED.value))
 
             case ["R", _]:
-                print("game restarted")
+                pygame.event.post(pygame.event.Event(CustomEvents.RESTARTED.value))
 
             case ["B", _]:
-                print("match ended")
+                pygame.event.post(pygame.event.Event(CustomEvents.MATCH_ENDED.value))
 
             case ["F", _]:
-                print("game ended")
+                pygame.event.post(pygame.event.Event(CustomEvents.GAME_ENDED.value))
 
             case["P", points]:
-                print("scored " + points)
+                event = pygame.event.Event(CustomEvents.SCORED.value, 
+                                           {"current_points": points})
+                pygame.event.post(event)
 
     def start(self):
         self.client.connect(self.url, self.port, 60)
@@ -82,6 +85,7 @@ class App:
         self.clock = pygame.time.Clock()
         self.running = True
         self.game_event_gen = GameEventGenerator()
+        self.font = pygame.font.SysFont("Arial", 36)
 
     def initialize(self):
         self.game_event_gen.start()
@@ -96,6 +100,25 @@ class App:
             self.clock.tick(60)
 
     def handle_event(self, event):
+        match event.type:
+            case pygame.QUIT:
+                self.running = False
+
+            case CustomEvents.STARTED.value:
+                print("x game started")
+
+            case CustomEvents.SCORED.value:
+                print("x scored: " + event.current_points)
+
+            case CustomEvents.MATCH_ENDED.value:
+                print("x match ended")
+
+            case CustomEvents.RESTARTED.value:
+                print("x match restarted")
+
+            case CustomEvents.GAME_ENDED.value:
+                print("x match ended")
+
         if event.type == pygame.QUIT:
             self.running = False
 
