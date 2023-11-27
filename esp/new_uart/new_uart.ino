@@ -71,16 +71,19 @@ void setup() {
 }
 
 
+
 void loop() {
   if (!mqttClient.connected())
     mqtt_reconnect();
   mqttClient.loop();
 
-  if (Serial.available()) {
-    byteCount = SerialFPGA.readBytesUntil('?', bytesFromFPGA, 4); // qual caracter?
-      mqttClient.publish((stateTopic).c_str(), bytesFromFPGA);
+  SerialFPGA.print("ABCD");
+  if (SerialFPGA.available()) {
+    byteCount = SerialFPGA.readBytesUntil('\n', bytesFromFPGA, 4); // qual caracter?
+    if (byteCount == 4) {
+        mqttClient.publish((stateTopic).c_str(), bytesFromFPGA);     
     }
-    
-  mqttClient.publish((stateTopic).c_str(), "teste");
+    Serial.printf("got: %c, %c, %c, %c\n", (char)bytesFromFPGA[0], (char)bytesFromFPGA[1], (char)bytesFromFPGA[2], (char)bytesFromFPGA[3]);
+  }
   delay(5000);
 }
