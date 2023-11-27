@@ -9,6 +9,8 @@
 !src
 !esp
 !esp/**
+!ui
+!ui/**
 !flip_flop_pinball.qpf
 !flip_flop_pinball.tcl
 !README.md
