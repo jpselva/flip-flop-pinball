@@ -64,7 +64,7 @@ class GameEventGenerator:
             case ["F", _]:
                 pygame.event.post(pygame.event.Event(CustomEvents.GAME_ENDED.value))
 
-            case["P", points]:
+            case ["P", points]:
                 event = pygame.event.Event(CustomEvents.SCORED.value, 
                                            {"current_points": points})
                 pygame.event.post(event)
@@ -78,6 +78,12 @@ class GameEventGenerator:
         self.client.disconnect()
 
 
+class GameState(Enum):
+    WAITING_START = 1
+    PLAYING = 2
+    WAITING_RESTART = 3
+
+
 class App:
     def __init__(self):
         pygame.init()
@@ -86,6 +92,8 @@ class App:
         self.running = True
         self.game_event_gen = GameEventGenerator()
         self.font = pygame.font.SysFont("Arial", 36)
+        self.state = GameState.WAITING_START.value
+        self.score = 0
 
     def initialize(self):
         self.game_event_gen.start()
@@ -95,8 +103,7 @@ class App:
             for event in pygame.event.get():
                 self.handle_event(event)
 
-            self.screen.fill("purple")
-            pygame.display.flip()
+            self.render()
             self.clock.tick(60)
 
     def handle_event(self, event):
@@ -105,22 +112,37 @@ class App:
                 self.running = False
 
             case CustomEvents.STARTED.value:
-                print("x game started")
+                self.state = GameState.PLAYING.value
 
             case CustomEvents.SCORED.value:
-                print("x scored: " + event.current_points)
+                self.score = event.current_points
 
             case CustomEvents.MATCH_ENDED.value:
-                print("x match ended")
+                self.state = GameState.WAITING_RESTART.value
 
             case CustomEvents.RESTARTED.value:
-                print("x match restarted")
+                self.state = GameState.PLAYING.value
 
             case CustomEvents.GAME_ENDED.value:
-                print("x match ended")
+                self.state = GameState.WAITING_START.value
+                self.score = 0
 
-        if event.type == pygame.QUIT:
-            self.running = False
+            case pygame.QUIT:
+                self.running = False
+
+    def render(self):
+        self.screen.fill("purple")
+
+        match self.state:
+            case GameState.WAITING_START.value:
+                txtsurf = self.font.render("APERTE START", True, (0,0,0))
+            case GameState.PLAYING.value:
+                txtsurf = self.font.render(f"PONTOS: {self.score}", True, (0,0,0))
+            case GameState.WAITING_RESTART.value:
+                txtsurf = self.font.render("PRESSIONE START PARA REINICIAR", True, (0,0,0))
+
+        self.screen.blit(txtsurf, (500-txtsurf.get_width()//2, 200-txtsurf.get_height()//2))
+        pygame.display.flip()
 
     def cleanup(self):
         self.game_event_gen.stop()
