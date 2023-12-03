@@ -132,16 +132,20 @@ class App:
 
     def render(self):
         self.screen.fill("purple")
+        black_rgb = (0, 0, 0)
 
         match self.state:
             case GameState.WAITING_START.value:
-                txtsurf = self.font.render("APERTE START", True, (0,0,0))
+                txtsurf = self.font.render("APERTE START", True, black_rgb)
             case GameState.PLAYING.value:
-                txtsurf = self.font.render(f"PONTOS: {self.score}", True, (0,0,0))
+                txtsurf = self.font.render(f"PONTOS: {self.score}", True,
+                                           black_rgb)
             case GameState.WAITING_RESTART.value:
-                txtsurf = self.font.render("PRESSIONE START PARA REINICIAR", True, (0,0,0))
+                txtsurf = self.font.render("PRESSIONE START PARA REINICIAR",
+                                           True, black_rgb)
 
-        self.screen.blit(txtsurf, (500-txtsurf.get_width()//2, 200-txtsurf.get_height()//2))
+        self.screen.blit(txtsurf, (500-txtsurf.get_width()//2,
+                                   200-txtsurf.get_height()//2))
         pygame.display.flip()
 
     def cleanup(self):
