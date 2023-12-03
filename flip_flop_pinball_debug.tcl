@@ -14,8 +14,8 @@
 # https://fpgasoftware.intel.com/eula.
 
 # Quartus Prime: Generate Tcl File for Project
-# File: flip_flop_pinball.tcl
-# Generated on: Sun Dec  3 20:36:53 2023
+# File: flip_flop_pinball_debug.tcl
+# Generated on: Sun Dec  3 19:13:00 2023
 
 # Load Quartus Prime Tcl Project package
 package require ::quartus::project
@@ -118,13 +118,13 @@ if {$make_assignments} {
 	set_global_assignment -name VHDL_FILE ./src/contador_m.vhd
 	set_global_assignment -name VHDL_FILE ./src/contador_bcd_3digitos.vhd
 	set_global_assignment -name VHDL_FILE ./src/circuito_pwm.vhd
-	set_location_assignment PIN_L8 -to botao1
-	set_location_assignment PIN_A15 -to botao2
+	set_location_assignment PIN_W9 -to botao1
+	set_location_assignment PIN_U7 -to botao2
 	set_location_assignment PIN_M9 -to clock
 	set_location_assignment PIN_B12 -to echo
 	set_location_assignment PIN_A12 -to trigger
-	set_location_assignment PIN_E14 -to iniciar
-	set_location_assignment PIN_B15 -to reset
+	set_location_assignment PIN_M6 -to iniciar
+	set_location_assignment PIN_V13 -to reset
 	set_location_assignment PIN_T15 -to pwm_flipper1
 	set_location_assignment PIN_T18 -to pwm_flipper2
 	set_location_assignment PIN_U21 -to db_estado[0]
@@ -166,11 +166,11 @@ if {$make_assignments} {
 	set_location_assignment PIN_T17 -to saida_serial
 	set_location_assignment PIN_T19 -to sinal_buzzer
 	set_location_assignment PIN_R16 -to sinal_led
-	set_location_assignment PIN_L17 -to alvos[0]
-	set_location_assignment PIN_M18 -to alvos[1]
-	set_location_assignment PIN_P17 -to alvos[2]
+	set_location_assignment PIN_AB12 -to alvos[0]
+	set_location_assignment PIN_AB13 -to alvos[1]
+	set_location_assignment PIN_AA13 -to alvos[2]
 	set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
-	set_location_assignment PIN_P19 -to alvos[3]
+	set_location_assignment PIN_AA14 -to alvos[3]
 
 	# Commit assignments
 	export_assignments

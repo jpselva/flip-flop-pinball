@@ -10,7 +10,7 @@ WiFiClient netClient;
 PubSubClient mqttClient(netClient);
 const char* mqtt_server = "broker.hivemq.com";
 int mqtt_port = 1883;
-String stateTopic = "estado";
+String stateTopic = "911030-jp/state";
 
 // Communication with FPGA
 HardwareSerial SerialFPGA(2); // Use UART 2 (esp32 gpio 16, 17)
