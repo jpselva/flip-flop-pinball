@@ -77,7 +77,6 @@ void loop() {
     mqtt_reconnect();
   mqttClient.loop();
 
-  SerialFPGA.print("ABCD");
   if (SerialFPGA.available()) {
     byteCount = SerialFPGA.readBytesUntil('\n', bytesFromFPGA, 4); // qual caracter?
     if (byteCount == 4) {
@@ -85,5 +84,5 @@ void loop() {
     }
     Serial.printf("got: %c, %c, %c, %c\n", (char)bytesFromFPGA[0], (char)bytesFromFPGA[1], (char)bytesFromFPGA[2], (char)bytesFromFPGA[3]);
   }
-  delay(5000);
+  delay(750);
 }
