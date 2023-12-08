@@ -15,7 +15,7 @@
 
 # Quartus Prime: Generate Tcl File for Project
 # File: flip_flop_pinball.tcl
-# Generated on: Tue Dec  5 17:24:36 2023
+# Generated on: Fri Dec 08 12:52:48 2023
 
 # Load Quartus Prime Tcl Project package
 package require ::quartus::project
@@ -125,8 +125,8 @@ if {$make_assignments} {
 	set_location_assignment PIN_A12 -to trigger
 	set_location_assignment PIN_K16 -to iniciar
 	set_location_assignment PIN_J17 -to reset
-	set_location_assignment PIN_T15 -to pwm_flipper1
-	set_location_assignment PIN_T18 -to pwm_flipper2
+	set_location_assignment PIN_D17 -to pwm_flipper1
+	set_location_assignment PIN_K20 -to pwm_flipper2
 	set_location_assignment PIN_U21 -to db_estado[0]
 	set_location_assignment PIN_V21 -to db_estado[1]
 	set_location_assignment PIN_W22 -to db_estado[2]
@@ -169,8 +169,8 @@ if {$make_assignments} {
 	set_location_assignment PIN_L17 -to alvos[0]
 	set_location_assignment PIN_M18 -to alvos[1]
 	set_location_assignment PIN_P17 -to alvos[2]
-	set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 	set_location_assignment PIN_P19 -to alvos[3]
+	set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 
 	# Commit assignments
 	export_assignments
