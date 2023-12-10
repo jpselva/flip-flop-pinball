@@ -128,8 +128,20 @@ architecture arch of flip_flop_pinball is
         );
     end component edge_detector;
 
+    component timed_edge_detector is
+        generic (
+            M : integer
+        );
+        port (
+            clock  : in  std_logic;
+            reset  : in  std_logic;
+            sinal  : in  std_logic;
+            pulso  : out std_logic
+        );
+    end component timed_edge_detector;
+
     signal s_not_botao1, s_not_botao2, s_not_iniciar, s_iniciar_edge : std_logic;
-    signal s_not_reset : std_logic;
+    signal s_not_reset, s_reset_edge : std_logic;
     signal s_db_detector_bola_estado : std_logic_vector(3 downto 0);
     signal s_bola_caiu          : std_logic;
     signal s_ponto_feito        : std_logic;
@@ -168,10 +180,21 @@ begin
         pulso => s_iniciar_edge
     );
 
+    EDGE_RESET: timed_edge_detector
+    generic map (
+        M => 5000000
+    )
+    port map (
+        clock => clock,
+        reset => '0',
+        sinal => s_not_reset,
+        pulso => s_reset_edge
+    );
+
     FD: flip_flop_pinball_fd
     port map (
         clock              => clock,
-        reset              => s_not_reset,
+        reset              => s_reset_edge,
         posicao_servo1     => s_not_botao1,
         posicao_servo2     => s_not_botao2,
         pwm_flipper1       => pwm_flipper1,
@@ -207,7 +230,7 @@ begin
     UC: flip_flop_pinball_uc
     port map (
         clock              => clock,
-        reset              => s_not_reset,
+        reset              => s_reset_edge,
         iniciar            => s_iniciar_edge,
         bola_caiu          => s_bola_caiu,
         ponto_feito        => s_ponto_feito,

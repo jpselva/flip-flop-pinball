@@ -263,10 +263,10 @@ begin
     -- ALWAYS SUBTRACT 1 FROM SCORE WHEN WRITING IT HERE
     -- (the counter counts down to 0, including 0, so it adds 1 extra cycle)
     with s_alvo_acertado select s_valor_alvo <=
-        "00000100" when "000",
-        "00001000" when "001",
-        "00010000" when "010",
-        "00100000" when "011",
+        "00000100" when "000", --5
+        "00011101" when "001", -- 30
+        "00001001" when "010", -- 10
+        "00011000" when "011", -- 25
         "01000000" when "100",
         "10000000" when "101",
         "10000000" when "110",

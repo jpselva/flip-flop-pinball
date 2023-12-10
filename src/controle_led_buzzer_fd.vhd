@@ -54,7 +54,7 @@ architecture arch of controle_led_buzzer_fd is
 begin
     CONT_TIMER: contador_m
     generic map (
-        M => 25000000,
+        M => 15000000,
 	    N => 25
         -- tb
 	    --M => 2500,
@@ -97,21 +97,21 @@ begin
     s_sel_nota <= s_sel_reg & s_sel_cont;
     with s_sel_nota select -- entrada do gerador de frequencia 
         s_nota <= "100000000000" when "00100", -- inicio rodada
-                  "100000000000" when "00101",
+                  "000010000000" when "00101",
                   "000000001000" when "00110",
-                  "000000000100" when "00111",
-                  "000000001000" when "01000", -- fim rodada
-                  "100000000000" when "01001",
+                  "001000000000" when "00111",
+                  "010000000000" when "01000", -- fim rodada
+                  "001000000000" when "01001",
                   "100000000000" when "01010",
                   "100000000000" when "01011",
-                  "000000001000" when "01100", -- fim jogo
-                  "000000001000" when "01101",
+                  "001000000000" when "01100", -- fim jogo
+                  "000000000100" when "01101",
                   "100000000000" when "01110",
-                  "000000000100" when "01111",
-                  "000000000100" when "10000", -- pontuacao feita
-                  "000000000010" when "10001",
-                  "000000000010" when "10010",
-                  "000000000000" when "10011",
+                  "100000000000" when "01111",
+                  "000000000010" when "10000", -- pontuacao feita
+                  "000000000100" when "10001",
+                  "000000010000" when "10010",
+                  "000000010000" when "10011",
                   "000000000000" when others;
     with s_sel_nota select -- entrada  
         s_sinal_led <= '1' when "00100", -- inicio rodada
